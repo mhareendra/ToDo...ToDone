@@ -122,6 +122,9 @@ public class ItemsAdapter extends ArrayAdapter<Item> {
     {
         try {
 
+            if(itemText.equals(""))
+                return;
+
             String displayText = itemText;
 
             if(displayText.contains("\n"))

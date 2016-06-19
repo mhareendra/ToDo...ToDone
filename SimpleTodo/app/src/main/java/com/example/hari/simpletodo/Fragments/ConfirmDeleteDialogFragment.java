@@ -35,7 +35,11 @@ public class ConfirmDeleteDialogFragment extends DialogFragment {
 
         final int position = getArguments().getInt("position");
 
-        alertDialogBuilder.setMessage("Are you sure you want to delete this item?");
+        String dialogMessage = "Are you sure you want to delete this item?";
+        if(position == -1)
+            dialogMessage = "Are you sure you want to delete all items?";
+
+        alertDialogBuilder.setMessage(dialogMessage);
         alertDialogBuilder.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {

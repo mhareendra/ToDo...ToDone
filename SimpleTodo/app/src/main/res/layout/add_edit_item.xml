@@ -136,17 +136,7 @@
             android:layout_alignRight="@+id/etItem"
             android:layout_alignEnd="@+id/etItem" />
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Save"
-        android:id="@+id/btnSaveItem"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="14dp"
-        android:layout_below="@id/tvPriorityVal"
-        android:layout_marginTop="45dp" />
-
-</RelativeLayout>
+    </RelativeLayout>
 
 
 </LinearLayout>
