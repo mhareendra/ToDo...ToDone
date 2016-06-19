@@ -3,13 +3,16 @@ package com.example.hari.simpletodo;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
+import com.example.hari.simpletodo.Fragments.ConfirmDeleteDialogFragment;
 import com.example.hari.simpletodo.Fragments.DatePickerFragment;
 import com.example.hari.simpletodo.Fragments.TimePickerFragment;
 import com.example.hari.simpletodo.Models.Item;
@@ -19,16 +22,17 @@ import java.util.Locale;
 import static com.example.hari.simpletodo.Models.Item.priorityToColor;
 
 public class AddEditItemActivity extends AppCompatActivity
-        implements DatePickerFragment.DatePickerDialogListener, TimePickerFragment.TimePickerDialogListener
+        implements DatePickerFragment.DatePickerDialogListener, TimePickerFragment.TimePickerDialogListener,ConfirmDeleteDialogFragment.ConfirmDeleteDialogListener
 {
 
+
+    private final int REQUEST_DELETE = -2;
 
     private EditText etItem;
     private TextView tvCompletionDate;
     private TextView tvCompletionTime;
     private TextView tvPriorityValue;
     private RatingBar priorityRating;
-    private Button btnSave;
 
     private String itemTextOriginal;
     private int position;
@@ -74,8 +78,6 @@ public class AddEditItemActivity extends AppCompatActivity
             tvCompletionTime = (TextView)findViewById(R.id.tvCompletionTime);
             tvPriorityValue = (TextView)findViewById(R.id.tvPriorityVal);
             priorityRating = (RatingBar)findViewById(R.id.ratingBar);
-            btnSave = (Button)findViewById(R.id.btnSaveItem);
-
 
             setEventListeners();
         }
@@ -113,14 +115,6 @@ public class AddEditItemActivity extends AppCompatActivity
                 }
             });
 
-            btnSave.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    SaveItem();
-                }
-            });
-
-
         }
         catch (Exception ex)
         {
@@ -157,8 +151,78 @@ public class AddEditItemActivity extends AppCompatActivity
     }
 
 
-    private void SaveItem()
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu)
     {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_add_edit, menu);
+
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.delete_option)
+        {
+            deleteItem();
+            return true;
+        }
+        else if(id == R.id.save_option)
+        {
+            saveItem();
+            return true;
+        }
+        else
+            return super.onOptionsItemSelected(item);
+    }
+
+
+    private void deleteItem()
+    {
+        try
+        {
+            showDeleteConfirmationDialog(position);
+
+
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+        }
+    }
+
+    @Override
+    public void onFinishConfirmDeleteDialog(boolean shouldDelete, int position) {
+        try
+        {
+            if(shouldDelete)
+            {
+                Intent data = new Intent();
+                data.putExtra("position", position);
+                setResult(REQUEST_DELETE, data);
+                finish();
+            }
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+        }
+    }
+
+    private void showDeleteConfirmationDialog(int position) {
+        FragmentManager fm = getSupportFragmentManager();
+
+        ConfirmDeleteDialogFragment alertDialog = ConfirmDeleteDialogFragment.newInstance("Delete confirmation", position);
+        alertDialog.show(fm, "fragment_alert");
+    }
+
+    private void saveItem() {
         try {
             Intent data = new Intent();
             String itemText = etItem.getText().toString().trim();
@@ -173,15 +237,12 @@ public class AddEditItemActivity extends AppCompatActivity
             data.putExtra("priority", priority);
             setResult(RESULT_OK, data);
             finish();
-        }
-        catch (Exception ex)
-        {
+        } catch (Exception ex) {
             ex.printStackTrace();
         }
     }
 
-    private void setPriorityValue(Item.Priority priority)
-    {
+    private void setPriorityValue(Item.Priority priority) {
         tvPriorityValue.setText(priority.toString());
         //set color to text
         tvPriorityValue.setTextColor(priorityToColor(priority));

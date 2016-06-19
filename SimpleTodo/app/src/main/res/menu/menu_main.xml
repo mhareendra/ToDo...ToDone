@@ -1,10 +1,34 @@
-<menu xmlns:android="http://schemas.android.com/apk/res/android"
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.example.hari.simpletodo.MainActivity">
     <item
-        android:id="@+id/action_settings"
+        android:id = "@+id/share_option"
+        android:title="Share"
         android:orderInCategory="100"
-        android:title="@string/action_settings"
-        app:showAsAction="never" />
+        app:showAsAction="ifRoom"
+        app:actionProviderClass=
+            "android.support.v7.widget.ShareActionProvider"
+        />
+
+    <item
+        android:id = "@+id/reverse_list_option"
+        android:title = "Reverse"
+        android:orderInCategory="101"
+        />
+
+    <item
+        android:id = "@+id/delete_all_option"
+        android:title="Delete all items"
+        android:orderInCategory="103"
+        />
+
+    <item
+        android:id = "@+id/refresh_option"
+        android:title = "Refresh"
+        android:orderInCategory = "102"
+
+        />
+
 </menu>
