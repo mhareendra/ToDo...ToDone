@@ -1,5 +1,7 @@
 package com.example.hari.simpletodo.Models;
 
+import android.graphics.Color;
+
 import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
@@ -30,6 +32,9 @@ public class Item extends Model{
     @Column(name = "CompletionTime")
     public String completionTime;
 
+    @Column(name = "Is_Completed")
+    public boolean isCompleted;
+
     public Item()
     {
         super();
@@ -55,6 +60,7 @@ public class Item extends Model{
         else
             this.completionTime = time;
 
+        this.isCompleted = false;
         this.itemId = itemId;
     }
 
@@ -107,4 +113,20 @@ public class Item extends Model{
         else
             return Priority.Medium;
     }
+
+
+    public static int priorityToColor(Priority priority)
+    {
+        if(priority == Item.Priority.Low)
+            return Color.parseColor("#ff80cbc4");
+        else if (priority == Item.Priority.Medium)
+            return Color.parseColor("#ffff8800");
+        else if (priority == Item.Priority.High)
+            return Color.parseColor("#ffff4444");
+
+        return 0;
+
+    }
+
+
 }

@@ -29,6 +29,7 @@ public class MainActivity extends AppCompatActivity implements ConfirmDeleteDial
     ItemsAdapter customItemsAdapter;
     ArrayList<Item> customItems;
 
+
     private long itemIdCounter =0;
 
     @Override
@@ -38,12 +39,18 @@ public class MainActivity extends AppCompatActivity implements ConfirmDeleteDial
 
         lvItems = (ListView)findViewById(R.id.lvItems);
 
+
         customItems = new ArrayList<>();
         customItemsAdapter = new ItemsAdapter(this, customItems);
         lvItems.setAdapter(customItemsAdapter);
 
         List<Item> allResults = Item.getAll();
-        itemIdCounter = allResults.size();
+
+        if(allResults.size() > 0)
+            itemIdCounter = allResults.get(allResults.size() - 1).itemId + 1;
+            //Assumes that the last item in the list contains the max itemId
+            //Add item starts from this itemId
+
         customItemsAdapter.addAll(allResults);
 
         setupListItemLongClickListener();
@@ -68,12 +75,6 @@ public class MainActivity extends AppCompatActivity implements ConfirmDeleteDial
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
 
                 showAlertDialog(position);
-                /*
-                Item itemToDelete = customItems.get(position);
-                customItems.remove(position);
-                itemToDelete.delete();
-                customItemsAdapter.notifyDataSetChanged();
-                */
                 return true;
             }
         });
@@ -88,7 +89,6 @@ public class MainActivity extends AppCompatActivity implements ConfirmDeleteDial
                 String date = customItems.get(position).completionDate;
                 Item.Priority priority = customItems.get(position).priority;
                 String time = customItems.get(position).completionTime;
-
                 launchAddEditItemActivity(itemText, position, date, priority, time);
             }
         });
@@ -122,9 +122,14 @@ public class MainActivity extends AppCompatActivity implements ConfirmDeleteDial
             customItems.remove(position);
             Item item = new Item();
             item.initialize(editedItem, priority, completionDate, completionTime, originalitemId);
+
             customItems.add(position, item);
             customItemsAdapter.notifyDataSetChanged();
             writeToDB(item);
+            //completedEditActivityVisualEffects(final View v);
+
+            View editedItemView = lvItems.getChildAt(position);
+            customItemsAdapter.completedEditActivityVisualEffects(editedItemView);
 
         }
     }
@@ -153,14 +158,17 @@ public class MainActivity extends AppCompatActivity implements ConfirmDeleteDial
 
     public void onAddItem(View view) {
         etNewItem = (EditText)findViewById(R.id.etNewItem);
-        String newItem = etNewItem.getText().toString();
-        if(newItem.trim().equals(""))
+        String newItemText = etNewItem.getText().toString().trim();
+        if(newItemText.trim().equals(""))
             return;
         Item item = new Item();
-        item.initialize(newItem, null, null, null, getItemId());
+        item.initialize(newItemText, null, null, null, getItemId());
         customItemsAdapter.add(item);
+
+        lvItems.smoothScrollToPosition(customItems.size());
         etNewItem.setText("");
         writeToDB(item);
+
     }
 
     private long getItemId()
@@ -168,7 +176,7 @@ public class MainActivity extends AppCompatActivity implements ConfirmDeleteDial
         return(itemIdCounter++);
     }
 
-    private void writeToDB(Item item)
+    public static void writeToDB(Item item)
     {
         item.save();
     }

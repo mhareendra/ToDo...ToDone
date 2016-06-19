@@ -7,7 +7,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
@@ -17,21 +16,19 @@ import com.example.hari.simpletodo.Models.Item;
 
 import java.util.Locale;
 
+import static com.example.hari.simpletodo.Models.Item.priorityToColor;
+
 public class AddEditItemActivity extends AppCompatActivity
         implements DatePickerFragment.DatePickerDialogListener, TimePickerFragment.TimePickerDialogListener
 {
 
 
     private EditText etItem;
-    private TextView tvDate;
-    private TextView tvTime;
+    private TextView tvCompletionDate;
+    private TextView tvCompletionTime;
     private TextView tvPriorityValue;
     private RatingBar priorityRating;
-    private ImageButton btnDatePicker;
-    private ImageButton btnTimePicker;
     private Button btnSave;
-    private Button btnCancel;
-
 
     private String itemTextOriginal;
     private int position;
@@ -57,8 +54,8 @@ public class AddEditItemActivity extends AppCompatActivity
             etItem.setText(itemTextOriginal);
             if(!itemTextOriginal.equals(null))
                 etItem.setSelection(itemTextOriginal.length());
-            tvDate.setText(completionDate);
-            tvTime.setText(completionTime);
+            tvCompletionDate.setText(completionDate);
+            tvCompletionTime.setText(completionTime);
             tvPriorityValue.setText(priority.toString());
             setRatingBar(priority);
         }
@@ -73,12 +70,10 @@ public class AddEditItemActivity extends AppCompatActivity
         try
         {
             etItem = (EditText)findViewById(R.id.etItem);
-            tvDate = (TextView)findViewById(R.id.tvCompletionDate);
-            tvTime = (TextView)findViewById(R.id.tvCompletionTime);
+            tvCompletionDate = (TextView)findViewById(R.id.tvCompletionDate);
+            tvCompletionTime = (TextView)findViewById(R.id.tvCompletionTime);
             tvPriorityValue = (TextView)findViewById(R.id.tvPriorityVal);
             priorityRating = (RatingBar)findViewById(R.id.ratingBar);
-            btnDatePicker = (ImageButton)findViewById(R.id.btnDatePicker);
-            btnTimePicker = (ImageButton)findViewById(R.id.btnTimePicker);
             btnSave = (Button)findViewById(R.id.btnSaveItem);
 
 
@@ -103,17 +98,18 @@ public class AddEditItemActivity extends AppCompatActivity
                 }
             });
 
-            btnDatePicker.setOnClickListener(new View.OnClickListener() {
+            tvCompletionDate.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    setBtnDatePickerListener();
+                    setDatePickerListener();
                 }
             });
 
-            btnTimePicker.setOnClickListener(new View.OnClickListener() {
+
+            tvCompletionTime.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    setBtnTimePickerListener();
+                    setTimePickerListener();
                 }
             });
 
@@ -133,7 +129,7 @@ public class AddEditItemActivity extends AppCompatActivity
 
     }
 
-    private void setBtnDatePickerListener()
+    private void setDatePickerListener()
     {
         if(completionDate.equals("") | !completionDate.contains("/"))
             return;
@@ -147,7 +143,7 @@ public class AddEditItemActivity extends AppCompatActivity
     }
 
 
-    private void setBtnTimePickerListener()
+    private void setTimePickerListener()
     {
         if(completionTime.equals("") | !completionTime.contains(":"))
             return;
@@ -165,7 +161,7 @@ public class AddEditItemActivity extends AppCompatActivity
     {
         try {
             Intent data = new Intent();
-            String itemText = etItem.getText().toString();
+            String itemText = etItem.getText().toString().trim();
 
             if (itemText.trim().equals(""))
                 itemText = itemTextOriginal;
@@ -187,6 +183,8 @@ public class AddEditItemActivity extends AppCompatActivity
     private void setPriorityValue(Item.Priority priority)
     {
         tvPriorityValue.setText(priority.toString());
+        //set color to text
+        tvPriorityValue.setTextColor(priorityToColor(priority));
     }
 
     private void setRatingBar(Item.Priority priority)
@@ -195,14 +193,13 @@ public class AddEditItemActivity extends AppCompatActivity
         priorityRating.setRating(rating + 1);
     }
 
-
     @Override
     public void onFinishDatePickDialog(int year, int monthOfYear, int dayOfMonth)
     {
         try
         {
             String date = String.format(Locale.US, "%02d/%02d/%d", monthOfYear, dayOfMonth, year);
-            tvDate.setText(date);
+            tvCompletionDate.setText(date);
             completionDate = date;
         }
         catch (Exception ex)
@@ -213,11 +210,10 @@ public class AddEditItemActivity extends AppCompatActivity
 
     @Override
     public void onFinishTimePickDialog(int hourOfDay, int minute, String amPm) {
-
         try
         {
             String time = String.format(Locale.US, "%d:%02d %s", hourOfDay, minute, amPm.toUpperCase(Locale.US));
-            tvTime.setText(time);
+            tvCompletionTime.setText(time);
             completionTime = time;
         }
         catch (Exception ex)
