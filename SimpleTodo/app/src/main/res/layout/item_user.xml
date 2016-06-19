@@ -9,11 +9,10 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="item"
         android:id="@+id/tvItem"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginLeft="14dp"
-        android:layout_marginTop="14dp" />
+        android:layout_alignTop="@+id/cbIsCompleted"
+        android:layout_toRightOf="@+id/cbIsCompleted"
+        android:layout_toEndOf="@+id/cbIsCompleted"
+        android:layout_marginLeft="14dp" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -48,5 +47,16 @@
         android:layout_alignTop="@+id/tvPriority"
         android:layout_alignRight="@+id/tvDate"
         android:layout_alignEnd="@+id/tvDate" />
+
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:focusable="false"
+        android:layout_marginTop="14dp"
+        android:layout_marginLeft="14dp"
+        android:id="@+id/cbIsCompleted"
+        android:checked="false" />
+
+
 
 </RelativeLayout>
