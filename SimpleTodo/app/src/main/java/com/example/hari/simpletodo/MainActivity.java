@@ -1,7 +1,9 @@
 package com.example.hari.simpletodo;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -9,6 +11,7 @@ import android.support.v7.widget.ShareActionProvider;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -32,6 +35,7 @@ public class MainActivity extends AppCompatActivity implements ConfirmDeleteDial
     ItemsAdapter customItemsAdapter;
     ArrayList<Item> customItems;
 
+    FloatingActionButton fabAdd;
 
     private long itemIdCounter =0;
     private static ShareActionProvider mShareActionProvider;
@@ -63,6 +67,24 @@ public class MainActivity extends AppCompatActivity implements ConfirmDeleteDial
         config.addModelClasses(Item.class);
         ActiveAndroid.initialize(config.create());
 
+
+        etNewItem = (EditText)findViewById(R.id.etNewItem);
+        fabAdd = (FloatingActionButton) findViewById(R.id.btnSaveItem);
+        fabAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(etNewItem.getVisibility() == View.INVISIBLE) {
+                    etNewItem.setVisibility(View.VISIBLE);
+                    etNewItem.requestFocus();
+                    etNewItem.setSelection(etNewItem.getText().length());
+
+                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.showSoftInput(etNewItem, InputMethodManager.SHOW_IMPLICIT);
+                }
+                else
+                    onAddItem(v);
+            }
+        });
     }
 
 
@@ -123,19 +145,17 @@ public class MainActivity extends AppCompatActivity implements ConfirmDeleteDial
             String completionTime = data.getStringExtra("completionTime");
             Item.Priority priority = ((Item.Priority) data.getExtras().get("priority"));
 
-            long originalitemId = customItems.get(position).itemId;
+            long originalItemId = customItems.get(position).itemId;
 
             customItems.remove(position);
             Item item = new Item();
-            item.initialize(editedItem, priority, completionDate, completionTime, originalitemId);
+            item.initialize(editedItem, priority, completionDate, completionTime, originalItemId);
+            item.shouldHighlight = true;
 
             customItems.add(position, item);
             customItemsAdapter.notifyDataSetChanged();
-            writeToDB(item);
-            //completedEditActivityVisualEffects(final View v);
 
-            View editedItemView = lvItems.getChildAt(position);
-            customItemsAdapter.completedEditActivityVisualEffects(editedItemView);
+            writeToDB(item);
 
         }
         else if(resultCode == RESULT_DELETE && requestCode == REQUEST_CODE)
@@ -143,7 +163,9 @@ public class MainActivity extends AppCompatActivity implements ConfirmDeleteDial
             int position = data.getIntExtra("position", -99);
             deleteFromList(position);
         }
+        etNewItem.setVisibility(View.INVISIBLE);
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -255,11 +277,11 @@ public class MainActivity extends AppCompatActivity implements ConfirmDeleteDial
             for(Item i : dbCustomItems)
             {
                 if(i.isCompleted) {
-                    messageCompletedItems += String.format("\n%s\n---",i.item);
+                    messageCompletedItems += String.format("\n%d. %s\n", countCompleted + 1, i.item);
                     countCompleted++;
                 }
                 else {
-                    messageToDoItems += String.format("\n%s by %s on %s\n---", i.item, i.completionTime, i.completionDate);
+                    messageToDoItems += String.format("\n%d. %s by %s on %s\n", countToDo + 1, i.item, i.completionTime, i.completionDate);
                     countToDo++;
                 }
             }
@@ -274,7 +296,7 @@ public class MainActivity extends AppCompatActivity implements ConfirmDeleteDial
             {
                 returnText = messageToDoItems;
             }
-            else if (countCompleted == 0 & countToDo == 0)
+            else if ((countCompleted + countToDo) == 0)
                 returnText = defaultText;
             else
                 returnText = String.format("%s\n\n%s" ,messageToDoItems, messageCompletedItems);
@@ -307,17 +329,19 @@ public class MainActivity extends AppCompatActivity implements ConfirmDeleteDial
 
 
     public void onAddItem(View view) {
-        etNewItem = (EditText)findViewById(R.id.etNewItem);
         String newItemText = etNewItem.getText().toString().trim();
         if(newItemText.trim().equals(""))
             return;
         Item item = new Item();
         item.initialize(newItemText, null, null, null, getItemId());
+
+        //item.shouldHighlight = true;
         customItemsAdapter.add(item);
 
         lvItems.smoothScrollToPosition(customItems.size());
         etNewItem.setText("");
         writeToDB(item);
+        //lvItems.requestFocus();
     }
 
     private long getItemId()

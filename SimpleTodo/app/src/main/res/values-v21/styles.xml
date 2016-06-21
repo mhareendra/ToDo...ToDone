@@ -6,4 +6,10 @@
         <item name="android:windowDrawsSystemBarBackgrounds">true</item>
         <item name="android:statusBarColor">@android:color/transparent</item>
     </style>
+
+    <style name="customMaterialDark" parent="Theme.AppCompat.DialogWhenLarge" >
+        <item name="android:colorForeground">@color/material_blue_grey_800</item>
+        <item name="android:colorBackground">@color/primary_text_default_material_light</item>
+        <item name="colorAccent">@android:color/holo_red_dark</item>
+    </style>
 </resources>

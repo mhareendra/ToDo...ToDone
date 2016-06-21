@@ -35,6 +35,8 @@ public class Item extends Model{
     @Column(name = "Is_Completed")
     public boolean isCompleted;
 
+    public boolean shouldHighlight;
+
     public Item()
     {
         super();
@@ -62,6 +64,9 @@ public class Item extends Model{
 
         this.isCompleted = false;
         this.itemId = itemId;
+
+        this.shouldHighlight = false;
+
     }
 
     private String getDefaultCompletionDate()

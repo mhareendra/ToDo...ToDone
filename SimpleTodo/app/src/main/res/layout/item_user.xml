@@ -21,22 +21,22 @@
         android:text="priority"
         android:id="@+id/tvPriority"
         android:textColor="@android:color/holo_orange_dark"
-        android:layout_below="@+id/tvItem"
-        android:layout_toLeftOf="@+id/tvTime"
-        android:layout_toStartOf="@+id/tvTime"
-        android:layout_marginRight="14dp" />
+        android:layout_below="@+id/cbIsCompleted"
+        android:layout_alignLeft="@+id/tvItem"
+        android:layout_alignStart="@+id/tvItem" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textAppearance="?android:attr/textAppearanceSmall"
         android:text="Date"
         android:id="@+id/tvDate"
-        android:textColor="@android:color/holo_green_light"
-        android:layout_alignTop="@+id/tvItem"
+        android:textColor="@android:color/darker_gray"
+        android:layout_marginRight="14dp"
+        android:layout_alignBottom="@+id/tvTime"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:layout_marginRight="14dp" />
+        android:layout_marginEnd="14dp" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -45,8 +45,9 @@
         android:text="Time"
         android:id="@+id/tvTime"
         android:layout_alignTop="@+id/tvPriority"
-        android:layout_alignRight="@+id/tvDate"
-        android:layout_alignEnd="@+id/tvDate" />
+        android:layout_toLeftOf="@+id/tvDate"
+        android:layout_toStartOf="@+id/tvDate"
+        android:layout_marginRight="14dp" />
 
     <CheckBox
         android:layout_width="wrap_content"

@@ -1,7 +1,6 @@
 package com.example.hari.simpletodo.Adapters;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,7 +26,7 @@ public class ItemsAdapter extends ArrayAdapter<Item> {
     private TextView tvItem;
     private CheckBox itemCheckBox;
 
-    private final int MAX_ITEM_TEXT_DISPLAY_LENGTH = 10;
+    private final int MAX_ITEM_TEXT_DISPLAY_LENGTH = 15;
     private Item currentItem;
 
     public ItemsAdapter(Context context, ArrayList<Item> items) {
@@ -65,6 +64,11 @@ public class ItemsAdapter extends ArrayAdapter<Item> {
 
         setCheckBoxListener(convertView);
         onCompletedVisualEffects(currentItem, convertView, currentItem.isCompleted);
+        if(currentItem.shouldHighlight) {
+            blink(convertView, currentItem);
+            //currentItem.shouldHighlight = false;
+        }
+
         return convertView;
     }
 
@@ -118,6 +122,18 @@ public class ItemsAdapter extends ArrayAdapter<Item> {
         }
     }
 
+    public void blink(final View v, final Item item) {
+        final int c = v.getDrawingCacheBackgroundColor();
+        v.animate().setDuration(600).alpha(0).withEndAction(new Runnable() {
+            @Override
+            public void run() {
+                v.setBackgroundColor(c);
+                v.setAlpha(1);
+                item.shouldHighlight = false;
+            }
+        });
+    }
+
     private void setItemTextView(String itemText)
     {
         try {
@@ -145,50 +161,5 @@ public class ItemsAdapter extends ArrayAdapter<Item> {
             ex.printStackTrace();
         }
     }
-
-
-    private void completedEditActivityVisualEffects(int position)
-    {
-        try
-        {
-            //View thisView = LayoutInflater.from(getContext()).inflate(R.layout.item_user, parent, false);
-
-        }
-        catch (Exception ex)
-        {
-            ex.printStackTrace();
-        }
-    }
-
-    public void completedEditActivityVisualEffects(final View v)
-    {
-        try
-        {
-            v.setBackgroundColor(Color.DKGRAY);
-            v.animate().setDuration(25).alpha(0).withEndAction(new Runnable() {
-                @Override
-                public void run() {
-                    //v.setBackgroundResource(R.drawable.standard_key_normal);
-                    int originalBGColor = v.getDrawingCacheBackgroundColor();
-                    v.setBackgroundColor(Color.BLUE);
-                    //v.setAlpha(1);
-                    //TransitionDrawable transition = viewHolderThubnail.relImage.getBackground();
-                    //transition.startTransition(1000);
-                    try {
-                        Thread.sleep(1000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    v.setBackgroundColor(originalBGColor);
-                }
-            });
-        }
-        catch (Exception ex)
-        {
-            ex.printStackTrace();
-        }
-    }
-
-
 
 }
