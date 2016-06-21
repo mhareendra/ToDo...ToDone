@@ -336,13 +336,11 @@ public class MainActivity extends AppCompatActivity implements ConfirmDeleteDial
         Item item = new Item();
         item.initialize(newItemText, null, null, null, getItemId());
 
-        //item.shouldHighlight = true;
         customItemsAdapter.add(item);
 
         lvItems.smoothScrollToPosition(customItems.size());
         etNewItem.setText("");
         writeToDB(item);
-        //lvItems.requestFocus();
     }
 
     private long getItemId()

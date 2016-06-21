@@ -26,7 +26,7 @@ public class ItemsAdapter extends ArrayAdapter<Item> {
     private TextView tvItem;
     private CheckBox itemCheckBox;
 
-    private final int MAX_ITEM_TEXT_DISPLAY_LENGTH = 15;
+    private final int MAX_ITEM_TEXT_DISPLAY_LENGTH = 20;
     private Item currentItem;
 
     public ItemsAdapter(Context context, ArrayList<Item> items) {
@@ -66,7 +66,6 @@ public class ItemsAdapter extends ArrayAdapter<Item> {
         onCompletedVisualEffects(currentItem, convertView, currentItem.isCompleted);
         if(currentItem.shouldHighlight) {
             blink(convertView, currentItem);
-            //currentItem.shouldHighlight = false;
         }
 
         return convertView;
@@ -141,20 +140,9 @@ public class ItemsAdapter extends ArrayAdapter<Item> {
             if(itemText.equals(""))
                 return;
 
-            String displayText = itemText;
+            //Add additional validation if required
 
-            if(displayText.contains("\n"))
-            {
-                int returnCharLocation = displayText.indexOf("\n");
-                displayText = displayText.substring(0, returnCharLocation );
-                displayText += "...";
-            }
-            else if(displayText.length() > MAX_ITEM_TEXT_DISPLAY_LENGTH) {
-                displayText = displayText.substring(0, MAX_ITEM_TEXT_DISPLAY_LENGTH);
-                displayText += "...";
-            }
-
-            tvItem.setText(displayText);
+            tvItem.setText(itemText);
         }
         catch (Exception ex)
         {
