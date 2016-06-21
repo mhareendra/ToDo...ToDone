@@ -12,16 +12,6 @@
     tools:context="com.example.hari.simpletodo.MainActivity"
     tools:showIn="@layout/activity_main">
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/add_item"
-        android:onClick="onAddItem"
-        android:id="@+id/btnAddItem"
-        android:layout_alignParentBottom="true"
-        android:layout_alignRight="@+id/lvItems"
-        android:layout_alignEnd="@+id/lvItems" />
-
     <ListView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -29,7 +19,8 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_above="@+id/btnAddItem" />
+        android:layout_above="@+id/btnSaveItem"
+        android:drawSelectorOnTop="false" />
 
     <EditText
         android:layout_width="wrap_content"
@@ -39,6 +30,20 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_toLeftOf="@+id/btnAddItem"
-        android:layout_toStartOf="@+id/btnAddItem" />
+        android:layout_marginLeft="14dp"
+        android:layout_toLeftOf="@+id/btnSaveItem"
+        android:layout_toStartOf="@+id/btnSaveItem"
+        android:visibility="invisible" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@android:drawable/ic_input_add"
+        android:id="@+id/btnSaveItem"
+        android:layout_alignBottom="@+id/etNewItem"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginRight="14dp"
+        android:layout_marginLeft="14dp"
+        app:fabSize="mini" />
 </RelativeLayout>

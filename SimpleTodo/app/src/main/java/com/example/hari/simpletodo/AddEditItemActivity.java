@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.RatingBar;
 import android.widget.TextView;
@@ -62,6 +63,8 @@ public class AddEditItemActivity extends AppCompatActivity
             tvCompletionTime.setText(completionTime);
             tvPriorityValue.setText(priority.toString());
             setRatingBar(priority);
+            getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+
         }
         catch (Exception ex)
         {
@@ -114,6 +117,7 @@ public class AddEditItemActivity extends AppCompatActivity
                     setTimePickerListener();
                 }
             });
+
 
         }
         catch (Exception ex)
