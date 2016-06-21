@@ -12,7 +12,10 @@
         android:layout_alignTop="@+id/cbIsCompleted"
         android:layout_toRightOf="@+id/cbIsCompleted"
         android:layout_toEndOf="@+id/cbIsCompleted"
-        android:layout_marginLeft="14dp" />
+        android:layout_marginLeft="14dp"
+        android:ellipsize="end"
+        android:singleLine="true"
+        />
 
     <TextView
         android:layout_width="wrap_content"
