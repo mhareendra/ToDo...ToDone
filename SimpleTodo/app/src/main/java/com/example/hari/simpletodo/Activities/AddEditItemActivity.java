@@ -1,4 +1,4 @@
-package com.example.hari.simpletodo;
+package com.example.hari.simpletodo.Activities;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -17,6 +17,7 @@ import com.example.hari.simpletodo.Fragments.ConfirmDeleteDialogFragment;
 import com.example.hari.simpletodo.Fragments.DatePickerFragment;
 import com.example.hari.simpletodo.Fragments.TimePickerFragment;
 import com.example.hari.simpletodo.Models.Item;
+import com.example.hari.simpletodo.R;
 
 import java.util.Locale;
 
