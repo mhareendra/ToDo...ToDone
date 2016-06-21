@@ -1,4 +1,4 @@
-package com.example.hari.simpletodo;
+package com.example.hari.simpletodo.Activities;
 
 import android.content.Context;
 import android.content.Intent;
@@ -22,6 +22,7 @@ import com.activeandroid.Configuration;
 import com.example.hari.simpletodo.Adapters.ItemsAdapter;
 import com.example.hari.simpletodo.Fragments.ConfirmDeleteDialogFragment;
 import com.example.hari.simpletodo.Models.Item;
+import com.example.hari.simpletodo.R;
 
 import java.util.ArrayList;
 import java.util.Collections;

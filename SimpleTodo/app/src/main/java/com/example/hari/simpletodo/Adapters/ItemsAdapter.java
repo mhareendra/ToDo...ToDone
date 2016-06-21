@@ -15,7 +15,7 @@ import com.example.hari.simpletodo.R;
 
 import java.util.ArrayList;
 
-import static com.example.hari.simpletodo.MainActivity.writeToDB;
+import static com.example.hari.simpletodo.Activities.MainActivity.writeToDB;
 import static com.example.hari.simpletodo.Models.Item.priorityToColor;
 
 /**
