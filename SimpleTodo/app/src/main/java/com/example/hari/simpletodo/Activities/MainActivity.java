@@ -21,6 +21,7 @@ import com.activeandroid.ActiveAndroid;
 import com.activeandroid.Configuration;
 import com.example.hari.simpletodo.Adapters.ItemsAdapter;
 import com.example.hari.simpletodo.Fragments.ConfirmDeleteDialogFragment;
+import com.example.hari.simpletodo.Fragments.EditItemFragment;
 import com.example.hari.simpletodo.Models.Item;
 import com.example.hari.simpletodo.R;
 
@@ -28,7 +29,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements ConfirmDeleteDialogFragment.ConfirmDeleteDialogListener {
+public class MainActivity extends AppCompatActivity
+        implements ConfirmDeleteDialogFragment.ConfirmDeleteDialogListener, EditItemFragment.EditItemFragmentListener
+{
 
     ListView lvItems;
     EditText etNewItem;
@@ -113,27 +116,21 @@ public class MainActivity extends AppCompatActivity implements ConfirmDeleteDial
         lvItems.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String itemText = customItems.get(position).item;
-                String date = customItems.get(position).completionDate;
-                Item.Priority priority = customItems.get(position).priority;
-                String time = customItems.get(position).completionTime;
-                launchAddEditItemActivity(itemText, position, date, priority, time);
+                Item thisItem = customItems.get(position);
+                showEditItemDialog(thisItem, position);
             }
         });
     }
 
+    private void showEditItemDialog(Item item, int position) {
+        FragmentManager fm = getSupportFragmentManager();
+        EditItemFragment editNameDialogFragment = EditItemFragment.newInstance(item, position);
+        editNameDialogFragment.show(fm, "fragment_edit_name");
+    }
+
+
     private int REQUEST_CODE = 0;
     private final int RESULT_DELETE = -2;
-    private void launchAddEditItemActivity(String itemText, int position, String date, Item.Priority priority, String time)
-    {
-        Intent addEditIntent = new Intent(this, AddEditItemActivity.class);
-        addEditIntent.putExtra("itemText", itemText);
-        addEditIntent.putExtra("position", position);
-        addEditIntent.putExtra("completionDate", date);
-        addEditIntent.putExtra("completionTime", time);
-        addEditIntent.putExtra("priority", priority);
-        startActivityForResult(addEditIntent, REQUEST_CODE);
-    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -401,6 +398,40 @@ public class MainActivity extends AppCompatActivity implements ConfirmDeleteDial
             customItemsAdapter.notifyDataSetChanged();
             setUpShare();
         } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+
+    @Override
+    public void onFinishEditItemFragment(Item item, int position, boolean shouldSave, boolean shouldDelete) {
+        try
+        {
+            if(shouldDelete) {
+                deleteFromList(position);
+            }
+            else if (shouldSave)
+            {
+                String editedItemText = item.item;
+                String completionDate = item.completionDate;
+                String completionTime = item.completionTime;
+                Item.Priority priority = item.priority;
+
+                long originalItemId = customItems.get(position).itemId;
+
+                customItems.remove(position);
+                Item editedItem = new Item();
+                editedItem.initialize(editedItemText, priority, completionDate, completionTime, originalItemId);
+                editedItem.shouldHighlight = true;
+
+                customItems.add(position, editedItem);
+                customItemsAdapter.notifyDataSetChanged();
+                writeToDB(editedItem);
+            }
+            etNewItem.setVisibility(View.INVISIBLE);
+        }
+        catch (Exception ex)
+        {
             ex.printStackTrace();
         }
     }

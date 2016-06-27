@@ -44,7 +44,7 @@ public class ConfirmDeleteDialogFragment extends DialogFragment {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 // on success
-                ConfirmDeleteDialogListener listener = (ConfirmDeleteDialogListener) getActivity();
+                ConfirmDeleteDialogListener listener = (ConfirmDeleteDialogListener) getTargetFragment();
                 listener.onFinishConfirmDeleteDialog(true, position);
 
             }
@@ -52,7 +52,7 @@ public class ConfirmDeleteDialogFragment extends DialogFragment {
         alertDialogBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                ConfirmDeleteDialogListener listener = (ConfirmDeleteDialogListener) getActivity();
+                ConfirmDeleteDialogListener listener = (ConfirmDeleteDialogListener) getTargetFragment();
                 listener.onFinishConfirmDeleteDialog(false, position);
                 dialog.dismiss();
             }

@@ -36,7 +36,7 @@ public class DatePickerFragment extends DialogFragment implements DatePickerDial
     {
         try
         {
-            DatePickerDialogListener listener = (DatePickerDialogListener)getActivity();
+            DatePickerDialogListener listener = (DatePickerDialogListener)getTargetFragment();
             listener.onFinishDatePickDialog(year, monthOfYear + 1, dayOfMonth);
         }
         catch (Exception ex)

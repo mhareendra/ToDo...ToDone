@@ -101,6 +101,18 @@ public class Item extends Model{
             return 0;
     }
 
+    public static Priority toPriority(String priority)
+    {
+        if(priority == Priority.Low.toString())
+            return Priority.Low;
+        else if (priority == Priority.Medium.toString())
+            return Priority.Medium;
+        else if(priority == Priority.High.toString())
+            return Priority.High;
+        else
+            return Priority.Low;
+    }
+
     public static List<Item> getAll()
     {
         List<Item> allItems = new Select().from(Item.class).orderBy("item_id ASC").execute();
