@@ -8,6 +8,8 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.hari.simpletodo.Models.Item;
@@ -16,7 +18,6 @@ import com.example.hari.simpletodo.R;
 import java.util.ArrayList;
 
 import static com.example.hari.simpletodo.Activities.MainActivity.writeToDB;
-import static com.example.hari.simpletodo.Models.Item.priorityToColor;
 
 /**
  * Created by Hari on 6/11/2016.
@@ -25,6 +26,8 @@ public class ItemsAdapter extends ArrayAdapter<Item> {
 
     private TextView tvItem;
     private CheckBox itemCheckBox;
+    private ProgressBar pbProgress;
+    private ImageView ivPriority;
 
     private Item currentItem;
 
@@ -46,16 +49,17 @@ public class ItemsAdapter extends ArrayAdapter<Item> {
 
         // Find the controls
         tvItem = (TextView)convertView.findViewById(R.id.tvItem);
-        TextView tvPriority = (TextView)convertView.findViewById(R.id.tvPriority);
+        ivPriority = (ImageView) convertView.findViewById(R.id.ivPriority);
         TextView tvDate = (TextView)convertView.findViewById(R.id.tvDate);
         TextView tvTime = (TextView)convertView.findViewById(R.id.tvTime);
+        pbProgress = (ProgressBar)convertView.findViewById(R.id.progressBar);
 
         //Populate the controls
         setItemTextView(currentItem.item);
-        tvPriority.setText(currentItem.priority.toString());
-        tvPriority.setTextColor(priorityToColor(currentItem.priority));
+        setPriorityImage(currentItem.priority);
         tvDate.setText(currentItem.completionDate);
         tvTime.setText(currentItem.completionTime);
+        pbProgress.setProgress(currentItem.progress);
 
         itemCheckBox = (CheckBox)convertView.findViewById(R.id.cbIsCompleted);
         itemCheckBox.setTag(currentItem);
@@ -70,6 +74,27 @@ public class ItemsAdapter extends ArrayAdapter<Item> {
         return convertView;
     }
 
+    private void setPriorityImage(Item.Priority priority)
+    {
+        try
+        {
+            if(priority == Item.Priority.Low)
+            {
+                ivPriority.setImageResource(R.drawable.ic_low_priority);
+            }
+            else if (priority == Item.Priority.Medium)
+            {
+                ivPriority.setImageResource(R.drawable.ic_medium_priority);
+            }
+            else
+                ivPriority.setImageResource(R.drawable.ic_high_priority);
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+        }
+    }
+
     private void setCheckBoxListener(final View thisView)
     {
         itemCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -78,6 +103,14 @@ public class ItemsAdapter extends ArrayAdapter<Item> {
 
                 final Item thisItem = (Item) buttonView.getTag();
                 thisItem.isCompleted = isChecked;
+                if(isChecked)
+                    thisItem.progress = pbProgress.getMax();
+                else
+                {
+                    //If the checkbox has been unchecked, also reset the progress bar
+                    if(thisItem.progress == pbProgress.getMax())
+                        thisItem.progress--;
+                }
                 onCompletedVisualEffects(thisItem, thisView, isChecked);
                 writeToDB(thisItem);
             }
@@ -91,14 +124,12 @@ public class ItemsAdapter extends ArrayAdapter<Item> {
             if(thisItem != null) {
 
                 TextView tvItem = (TextView) thisView.findViewById(R.id.tvItem);
-                TextView tvPriority = (TextView)thisView.findViewById(R.id.tvPriority);
                 TextView tvDate = (TextView)thisView.findViewById(R.id.tvDate);
                 TextView tvTime = (TextView)thisView.findViewById(R.id.tvTime);
 
                 //Strike-through the controls to indicate that this item has been completed
                 if(isCompleted) {
                     tvItem.setPaintFlags(tvItem.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-                    tvPriority.setPaintFlags(tvItem.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
                     tvDate.setPaintFlags(tvItem.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
                     tvTime.setPaintFlags(tvItem.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
 
@@ -106,7 +137,6 @@ public class ItemsAdapter extends ArrayAdapter<Item> {
                 //Remove strike-through effect
                 else {
                     tvItem.setPaintFlags(tvItem.getPaintFlags() & ~Paint.STRIKE_THRU_TEXT_FLAG);
-                    tvPriority.setPaintFlags(tvItem.getPaintFlags() & ~Paint.STRIKE_THRU_TEXT_FLAG);
                     tvDate.setPaintFlags(tvItem.getPaintFlags() & ~Paint.STRIKE_THRU_TEXT_FLAG);
                     tvTime.setPaintFlags(tvItem.getPaintFlags() & ~Paint.STRIKE_THRU_TEXT_FLAG);
                 }

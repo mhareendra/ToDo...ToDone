@@ -24,23 +24,12 @@
         android:id="@+id/tvItem"
         android:layout_alignTop="@+id/cbIsCompleted"
         android:layout_toRightOf="@+id/cbIsCompleted"
-        android:layout_toEndOf="@+id/cbIsCompleted"
         android:layout_marginLeft="14dp"
         android:ellipsize="end"
         android:singleLine="true"
-        />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text="priority"
-        android:id="@+id/tvPriority"
-        android:textColor="@android:color/holo_orange_dark"
-        android:layout_below="@+id/cbIsCompleted"
-        android:layout_alignLeft="@+id/tvItem"
-        android:layout_alignStart="@+id/tvItem"
-        android:layout_marginBottom="14dp" />
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginRight="50dp" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -61,10 +50,11 @@
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:text="Time"
         android:id="@+id/tvTime"
-        android:layout_alignTop="@+id/tvPriority"
         android:layout_toLeftOf="@+id/tvDate"
         android:layout_toStartOf="@+id/tvDate"
-        android:layout_marginRight="14dp" />
+        android:layout_marginRight="14dp"
+        android:layout_below="@+id/cbIsCompleted"
+        android:layout_marginBottom="14dp" />
 
     <CheckBox
         android:layout_width="wrap_content"
@@ -75,6 +65,28 @@
         android:id="@+id/cbIsCompleted"
         android:checked="false" />
 
+    <ProgressBar
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/progressBar"
+        android:max="4"
+        android:progress="1"
+        android:indeterminate="false"
+        android:layout_alignBottom="@+id/tvTime"
+        android:layout_alignLeft="@+id/tvItem"
+        android:layout_alignStart="@+id/tvItem" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/ivPriority"
+        android:src="@drawable/ic_medium_priority"
+
+        android:layout_above="@+id/progressBar"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginRight="14dp" />
 
 
 </RelativeLayout>

@@ -19,7 +19,9 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.RatingBar;
+import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.hari.simpletodo.Models.Item;
 import com.example.hari.simpletodo.R;
@@ -39,10 +41,16 @@ public class EditItemFragment extends DialogFragment
     private TextView tvPriorityValue;
     private RatingBar priorityRating;
     private Toolbar toolbar;
+    private EditText etNotes;
+    private SeekBar sbProgress;
+    private TextView tvProgressPercentage;
+
 
     private String completionDate;
     private String completionTime;
     private Item.Priority priority;
+    private int progress;
+    private String notes;
 
     private int position;
     private String itemTextOriginal;
@@ -60,6 +68,8 @@ public class EditItemFragment extends DialogFragment
         args.putString("completionDate", item.completionDate);
         args.putString("completionTime", item.completionTime);
         args.putString("priority", item.priority.toString());
+        args.putString("notes", item.notes);
+        args.putInt("progress", item.progress);
 
         frag.setArguments(args);
         return frag;
@@ -79,6 +89,8 @@ public class EditItemFragment extends DialogFragment
         completionDate = getArguments().getString("completionDate");
         completionTime = getArguments().getString("completionTime");
         priority = Item.toPriority(getArguments().getString("priority"));
+        progress = getArguments().getInt("progress");
+        notes = getArguments().getString("notes");
 
         findControls(view);
         try {
@@ -89,6 +101,9 @@ public class EditItemFragment extends DialogFragment
             tvCompletionTime.setText(completionTime);
             tvPriorityValue.setText(priority.toString());
             setRatingBar(priority);
+            sbProgress.setProgress(progress);
+            setProgressPercentTextView(progress);
+            etNotes.setText(notes);
             getDialog().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
 
         }
@@ -98,6 +113,19 @@ public class EditItemFragment extends DialogFragment
         }
 
 
+    }
+
+    private void setProgressPercentTextView(int progress)
+    {
+        try
+        {
+            int progressPercentage = (progress * 25);
+            tvProgressPercentage.setText(String.format(Locale.US, "%d", progressPercentage) + "%");
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+        }
     }
 
     @Override
@@ -118,6 +146,10 @@ public class EditItemFragment extends DialogFragment
             tvCompletionTime = (TextView)view.findViewById(R.id.tvCompletionTime);
             tvPriorityValue = (TextView)view.findViewById(R.id.tvPriorityVal);
             priorityRating = (RatingBar)view.findViewById(R.id.ratingBar);
+            sbProgress = (SeekBar) view.findViewById(R.id.seekBarProgress);
+            etNotes = (EditText) view.findViewById(R.id.etNotes);
+            tvProgressPercentage = (TextView) view.findViewById(R.id.tvProgressPercentage);
+
             toolbar = (Toolbar) view.findViewById(R.id.edit_fragment_toolbar);
             toolbar.setTitle("Edit Item");
             setEventListeners();
@@ -128,6 +160,7 @@ public class EditItemFragment extends DialogFragment
         }
     }
 
+    private boolean isItemMarkedComplete = false;
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     private void setEventListeners()
     {
@@ -153,6 +186,31 @@ public class EditItemFragment extends DialogFragment
                 @Override
                 public void onClick(View v) {
                     setTimePickerListener();
+                }
+            });
+
+            sbProgress.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+                @Override
+                public void onProgressChanged(SeekBar seekBar, int progressVal, boolean fromUser) {
+                    progress = progressVal;
+                    setProgressPercentTextView(progress);
+                    isItemMarkedComplete = false;
+                    if(progressVal == seekBar.getMax())
+                    {
+                        isItemMarkedComplete = true;
+                        if(fromUser)
+                            Toast.makeText(getContext(), "Item has been marked complete!", Toast.LENGTH_SHORT).show();
+                    }
+                }
+
+                @Override
+                public void onStartTrackingTouch(SeekBar seekBar) {
+
+                }
+
+                @Override
+                public void onStopTrackingTouch(SeekBar seekBar) {
+
                 }
             });
 
@@ -337,8 +395,12 @@ public class EditItemFragment extends DialogFragment
 
             if (itemText.trim().equals(""))
                 itemText = itemTextOriginal;
+
+            String notes = etNotes.getText().toString().trim();
+
+
             Item newItem = new Item();
-            newItem.initialize(itemText, priority, completionDate, completionTime, -1);
+            newItem.initialize(itemText, priority, completionDate, completionTime, progress, notes, isItemMarkedComplete, -1);
 
             EditItemFragmentListener listener = (EditItemFragmentListener) getActivity();
             listener.onFinishEditItemFragment(newItem, position, true, false);

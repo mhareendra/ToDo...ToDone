@@ -35,6 +35,12 @@ public class Item extends Model{
     @Column(name = "Is_Completed")
     public boolean isCompleted;
 
+    @Column(name = "Progress")
+    public int progress;
+
+    @Column(name = "Notes")
+    public String notes;
+
     public boolean shouldHighlight;
 
     public Item()
@@ -42,7 +48,7 @@ public class Item extends Model{
         super();
     }
 
-    public void initialize(String item, Priority priority, String date, String time, long itemId)
+    public void initialize(String item, Priority priority, String date, String time, int progress, String notes, long itemId)
     {
         this.item = item;
         if(priority == null)
@@ -63,10 +69,17 @@ public class Item extends Model{
             this.completionTime = time;
 
         this.isCompleted = false;
+        this.progress = progress;
+        this.notes = notes;
         this.itemId = itemId;
 
         this.shouldHighlight = false;
+    }
 
+    public void initialize(String item, Priority priority, String date, String time, int progress, String notes, boolean isCompleted, long itemId)
+    {
+        initialize(item, priority, date, time, progress, notes, itemId);
+        this.isCompleted = isCompleted;
     }
 
     private String getDefaultCompletionDate()

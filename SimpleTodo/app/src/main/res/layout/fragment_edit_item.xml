@@ -18,7 +18,7 @@
         <RelativeLayout
             xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"  >
+            android:layout_height="531dp"  >
 
             <android.support.v7.widget.Toolbar
                 android:layout_width="match_parent"
@@ -147,6 +147,68 @@
                 android:layout_above="@+id/textView3"
                 android:layout_alignRight="@+id/etItem"
                 android:layout_alignEnd="@+id/etItem" />
+
+            <SeekBar
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/seekBarProgress"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
+                android:layout_marginRight="10dp"
+                android:layout_alignLeft="@+id/ratingBar"
+                android:layout_alignStart="@+id/ratingBar"
+                android:layout_alignBottom="@+id/textView"
+                android:layout_alignTop="@+id/textView"
+                android:max="4"
+                android:progress="0"
+                android:indeterminate="false" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="Progress"
+                android:id="@+id/textView"
+                android:layout_below="@+id/tvPriorityVal"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_marginLeft="14dp"
+                android:layout_marginTop="14dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="Notes"
+                android:id="@+id/textView7"
+                android:layout_below="@+id/tvProgressPercentage"
+                android:layout_alignLeft="@+id/tvProgressPercentage"
+                android:layout_alignStart="@+id/tvProgressPercentage"
+                android:layout_marginTop="14dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:text="0 %"
+                android:id="@+id/tvProgressPercentage"
+                android:layout_below="@+id/textView"
+                android:layout_alignLeft="@+id/textView"
+                android:layout_alignStart="@+id/textView" />
+
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/etNotes"
+                android:hint="Enter text"
+                android:layout_below="@+id/textView7"
+                android:layout_alignLeft="@+id/textView7"
+                android:layout_alignStart="@+id/textView7"
+                android:layout_marginTop="14dp"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
+                android:layout_marginRight="14dp"
+                android:layout_marginBottom="14dp" />
 
         </RelativeLayout>
 
