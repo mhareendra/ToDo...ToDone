@@ -14,20 +14,26 @@
     <item
         android:id = "@+id/reverse_list_option"
         android:title = "Reverse"
-        android:orderInCategory="101"
+        android:orderInCategory="102"
         />
 
     <item
         android:id = "@+id/delete_all_option"
         android:title="Delete all items"
-        android:orderInCategory="103"
+        android:orderInCategory="104"
         />
 
     <item
         android:id = "@+id/refresh_option"
         android:title = "Refresh"
-        android:orderInCategory = "102"
+        android:orderInCategory = "101"
 
+        />
+
+    <item
+        android:id="@+id/delete_selected_option"
+        android:title="Delete selected"
+        android:orderInCategory="103"
         />
 
 </menu>

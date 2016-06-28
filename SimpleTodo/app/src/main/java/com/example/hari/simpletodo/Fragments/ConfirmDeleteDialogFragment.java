@@ -38,6 +38,8 @@ public class ConfirmDeleteDialogFragment extends DialogFragment {
         String dialogMessage = "Are you sure you want to delete this item?";
         if(position == -1)
             dialogMessage = "Are you sure you want to delete all items?";
+        else if (position == -2)
+            dialogMessage = "Are you sure you want to delete the selected item(s)?";
 
         alertDialogBuilder.setMessage(dialogMessage);
         alertDialogBuilder.setPositiveButton("Delete", new DialogInterface.OnClickListener() {

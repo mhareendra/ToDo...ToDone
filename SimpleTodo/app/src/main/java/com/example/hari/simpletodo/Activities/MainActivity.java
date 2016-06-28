@@ -96,6 +96,7 @@ public class MainActivity extends AppCompatActivity
         if (bar!=null) {
             bar.setDisplayShowHomeEnabled(true);
             bar.setIcon(R.mipmap.ic_launcher);
+            bar.setDisplayShowTitleEnabled(false);
         }
     }
 
@@ -167,7 +168,7 @@ public class MainActivity extends AppCompatActivity
         else if(resultCode == RESULT_DELETE && requestCode == REQUEST_CODE)
         {
             int position = data.getIntExtra("position", -99);
-            deleteFromList(position);
+            deleteFromList(position, true);
         }
         etNewItem.setVisibility(View.INVISIBLE);
     }
@@ -197,6 +198,11 @@ public class MainActivity extends AppCompatActivity
         if (id == R.id.delete_all_option)
         {
             deleteAllItems();
+            return true;
+        }
+        else if(id == R.id.delete_selected_option)
+        {
+            deleteSelectedItems();
             return true;
         }
         else if (id == R.id.refresh_option)
@@ -334,6 +340,38 @@ public class MainActivity extends AppCompatActivity
     }
 
 
+    private void deleteSelectedItems()
+    {
+        try
+        {
+            if(customItems.size() == 0) {
+
+                Toast.makeText(this, "No items to delete!", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            else
+            {
+                boolean noneSelected = true;
+                for(int i =0 ; i< customItems.size(); i++)
+                {
+                    if(customItems.get(i).isCompleted) {
+                        noneSelected = false;
+                        break;
+                    }
+                }
+                if(noneSelected) {
+                    Toast.makeText(this, "No items selected!", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+            }
+            showDeleteConfirmationDialog(-2);
+        }
+        catch (Exception ex)
+        {
+
+        }
+    }
+
     public void onAddItem(View view) {
         String newItemText = etNewItem.getText().toString().trim();
         if(newItemText.trim().equals(""))
@@ -368,14 +406,27 @@ public class MainActivity extends AppCompatActivity
                 if(position == -1)
                 {
                     int numItems = customItems.size();
+                    //Delete the first item iteratively
                     for(int i =0 ; i < numItems; i++)
                     {
-                        deleteFromList(-1);
+                        deleteFromList(-1, false);
                     }
-                    Toast.makeText(this, "All Items have been deleted!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "All items have been deleted!", Toast.LENGTH_SHORT).show();
+                }
+                else if (position == -2)
+                {
+                    int i = 0;
+                    while(i < customItems.size())
+                    {
+                        if(customItems.get(i).isCompleted)
+                            deleteFromList(i, false);
+                        else
+                            i++;
+                    }
+                    Toast.makeText(this, "The selected items have been deleted!", Toast.LENGTH_SHORT).show();
                 }
                 else
-                    deleteFromList(position);
+                    deleteFromList(position, true);
             }
         }
         catch (Exception ex)
@@ -388,15 +439,17 @@ public class MainActivity extends AppCompatActivity
     ///If position is -1, it means that all items in the list have to be deleted.
     ///This can be done by deleting just the first item in this method call.
     ///The callee is responsible for making multiple calls to this method as required
-    private void deleteFromList(int position) {
+    private void deleteFromList(int position, boolean displayToast) {
         try {
 
             Item itemToDelete = new Item();
             if(position > -1) {
                 itemToDelete = customItems.get(position);
                 customItems.remove(position);
-                String toastMessage = String.format("%s has been deleted", itemToDelete.item);
-                Toast.makeText(this, toastMessage, Toast.LENGTH_SHORT).show();
+                if(displayToast) {
+                    String toastMessage = String.format("%s has been deleted", itemToDelete.item);
+                    Toast.makeText(this, toastMessage, Toast.LENGTH_SHORT).show();
+                }
             }
             else if(position == -1) {
                 itemToDelete = customItems.get(0);
@@ -416,7 +469,7 @@ public class MainActivity extends AppCompatActivity
         try
         {
             if(shouldDelete) {
-                deleteFromList(position);
+                deleteFromList(position, true);
             }
             else if (shouldSave)
             {
