@@ -26,7 +26,6 @@ public class ItemsAdapter extends ArrayAdapter<Item> {
     private TextView tvItem;
     private CheckBox itemCheckBox;
 
-    private final int MAX_ITEM_TEXT_DISPLAY_LENGTH = 20;
     private Item currentItem;
 
     public ItemsAdapter(Context context, ArrayList<Item> items) {
@@ -122,11 +121,9 @@ public class ItemsAdapter extends ArrayAdapter<Item> {
     }
 
     public void blink(final View v, final Item item) {
-        final int c = v.getDrawingCacheBackgroundColor();
         v.animate().setDuration(600).alpha(0).withEndAction(new Runnable() {
             @Override
             public void run() {
-                v.setBackgroundColor(c);
                 v.setAlpha(1);
                 item.shouldHighlight = false;
             }

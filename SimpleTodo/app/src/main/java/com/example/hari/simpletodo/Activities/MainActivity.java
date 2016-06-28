@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.MenuItemCompat;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.ShareActionProvider;
 import android.view.Menu;
@@ -34,6 +35,7 @@ public class MainActivity extends AppCompatActivity
 {
 
     ListView lvItems;
+
     EditText etNewItem;
 
     ItemsAdapter customItemsAdapter;
@@ -89,6 +91,12 @@ public class MainActivity extends AppCompatActivity
                     onAddItem(v);
             }
         });
+
+        ActionBar bar = getSupportActionBar();
+        if (bar!=null) {
+            bar.setDisplayShowHomeEnabled(true);
+            bar.setIcon(R.mipmap.ic_launcher);
+        }
     }
 
 
