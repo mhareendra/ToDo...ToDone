@@ -4,7 +4,7 @@
 
 Submitted by: **Hareendra Manuru**
 
-Time spent: **30** hours spent in total
+Time spent: **36** hours spent in total
 
 ## User Stories
 
@@ -19,7 +19,7 @@ The following **optional** features are implemented:
 * [X] Persist the todo items [into SQLite](http://guides.codepath.com/android/Persisting-Data-to-the-Device#sqlite) instead of a text file
 * [X] Improve style of the todo items in the list [using a custom adapter](http://guides.codepath.com/android/Using-an-ArrayAdapter-with-ListView)
 * [X] Add support for completion due dates for todo items (and display within listview item)
-* [X] Use a [DialogFragment](http://guides.codepath.com/android/Using-DialogFragment) instead of new Activity for editing items  (Used DialogFragment for editing date and time) 
+* [X] Use a [DialogFragment](http://guides.codepath.com/android/Using-DialogFragment) instead of new Activity for editing items  
 * [X] Add support for selecting the priority of each todo item (and display in listview item)
 * [X] Tweak the style improving the UI / UX, play with colors, images or backgrounds
 
@@ -31,19 +31,24 @@ The following **additional** features are implemented:
 * [X] Support to visually indicate completed items (strike-through)
 * [X] Visual indicator of edited item (blink effect)
 * [X] Options menu - Reverse list, Refresh list and Delete all items
-* [X] Floating Action button and un-obtrusive edittext to add quickly new items
+* [X] Floating Action button and un-obtrusive edittext to quickly add new items
+* [X] CardView user interface to display the items
+* [X] Support for tracking the progress of each item, also linked to completion status
+* [X] Options menu item to delete completed items or all items
+* [X] Support for adding notes to items
+* [X] Priority of item now displayed as an image rather than text
 
 ## Video Walkthrough 
 
 Here's a walkthrough of implemented user stories:
 
-<img src='https://github.com/mhareendra/ToDo...ToDone/blob/master/SimpleTodo/ToDo...ToDone_4.gif' width='' />
+<img src='https://github.com/mhareendra/ToDo...ToDone/blob/master/SimpleTodo/ToDo...ToDone_5.gif' width='' />
 
 GIF created with [LiceCap](http://www.cockos.com/licecap/).
 
 ## Notes
 
-Challenges - Faced problems trying to tweak the UI when using Relative layout and handling edge cases. 
+Challenges - Faced problems trying to tweak the UI when using Relative layout and handling edge cases. Passing data between the MainActivity and fragment was non-trivial. 
 
 ## License
 
