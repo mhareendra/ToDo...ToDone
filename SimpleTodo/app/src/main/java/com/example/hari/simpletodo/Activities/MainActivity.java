@@ -137,43 +137,6 @@ public class MainActivity extends AppCompatActivity
         editNameDialogFragment.show(fm, "fragment_edit_name");
     }
 
-
-    private int REQUEST_CODE = 0;
-    private final int RESULT_DELETE = -2;
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-
-        if(resultCode == RESULT_OK && requestCode == REQUEST_CODE)
-        {
-            String editedItem = data.getStringExtra("itemText");
-            int position = data.getIntExtra("position", -99);
-            String completionDate = data.getStringExtra("completionDate");
-            String completionTime = data.getStringExtra("completionTime");
-            Item.Priority priority = ((Item.Priority) data.getExtras().get("priority"));
-
-            long originalItemId = customItems.get(position).itemId;
-
-            customItems.remove(position);
-            Item item = new Item();
-            item.initialize(editedItem, priority, completionDate, completionTime, originalItemId);
-            item.shouldHighlight = true;
-
-            customItems.add(position, item);
-            customItemsAdapter.notifyDataSetChanged();
-
-            writeToDB(item);
-
-        }
-        else if(resultCode == RESULT_DELETE && requestCode == REQUEST_CODE)
-        {
-            int position = data.getIntExtra("position", -99);
-            deleteFromList(position, true);
-        }
-        etNewItem.setVisibility(View.INVISIBLE);
-    }
-
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -377,7 +340,7 @@ public class MainActivity extends AppCompatActivity
         if(newItemText.trim().equals(""))
             return;
         Item item = new Item();
-        item.initialize(newItemText, null, null, null, getItemId());
+        item.initialize(newItemText, null, null, null, 0, "", getItemId());
 
         customItemsAdapter.add(item);
 
@@ -477,12 +440,15 @@ public class MainActivity extends AppCompatActivity
                 String completionDate = item.completionDate;
                 String completionTime = item.completionTime;
                 Item.Priority priority = item.priority;
+                int progress = item.progress;
+                String notes = item.notes;
+                boolean isComplete = item.isCompleted;
 
                 long originalItemId = customItems.get(position).itemId;
 
                 customItems.remove(position);
                 Item editedItem = new Item();
-                editedItem.initialize(editedItemText, priority, completionDate, completionTime, originalItemId);
+                editedItem.initialize(editedItemText, priority, completionDate, completionTime, progress, notes, isComplete , originalItemId);
                 editedItem.shouldHighlight = true;
 
                 customItems.add(position, editedItem);
