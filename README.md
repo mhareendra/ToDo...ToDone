@@ -46,9 +46,6 @@ Here's a walkthrough of implemented user stories:
 
 GIF created with [LiceCap](http://www.cockos.com/licecap/).
 
-## Notes
-
-Challenges - Faced problems trying to tweak the UI when using Relative layout and handling edge cases. Passing data between the MainActivity and fragment was non-trivial. 
 
 ## License
 
